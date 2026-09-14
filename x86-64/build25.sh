@@ -47,6 +47,12 @@ echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建固件..."
 # 定义所需安装的包列表 下列插件你都可以自行删减
 PACKAGES=""
 PACKAGES="$PACKAGES curl"
+# 旁路由排障：使用完整版 tcpdump，勿同时添加 tcpdump-mini
+PACKAGES="$PACKAGES tcpdump conntrack ip-full jq bind-dig htop"
+# 按需从独立客户端发起测速；本机测速不代表客户端代理链路
+PACKAGES="$PACKAGES iperf3"
+# PVE 客体管理：迁入 PVE 后需同时启用虚拟机的 QEMU Guest Agent 选项
+PACKAGES="$PACKAGES qemu-ga"
 PACKAGES="$PACKAGES luci-i18n-diskman-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-firewall-zh-cn"
 PACKAGES="$PACKAGES luci-theme-argon"
