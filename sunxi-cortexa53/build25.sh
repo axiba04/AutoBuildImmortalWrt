@@ -107,6 +107,14 @@ else
 fi
 
 
+# 必须在第三方 APK 整理和其他核心下载之后执行，失败时停止构建。
+case " $PACKAGES " in
+    *" nikki "*|*" luci-app-nikki "*|*" luci-i18n-nikki-"*)
+        NIKKI_PACKAGES=$(bash shell/apk-latest-nikki.sh) || exit 1
+        PACKAGES="$PACKAGES $NIKKI_PACKAGES"
+        ;;
+esac
+
 make image PROFILE=$PROFILE PACKAGES="$PACKAGES" FILES="/home/build/immortalwrt/files" ROOTFS_PARTSIZE=$ROOTFS_PARTSIZE
 
 if [ $? -ne 0 ]; then

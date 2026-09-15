@@ -31,6 +31,24 @@
 1、fork本项目<br>
 2、在fork后的项目中 点击【action】 找到需要的工作流后 run-workflow<br>
 
+## 25.12 镜像中的 Nikki 和 Mihomo 版本
+
+`shell/apk-custom-packages.sh` 默认启用 Nikki。25.12 的 x86-64（含 ISO）、Rockchip、Sunxi 和无线路由器构建会在 `make image` 前执行 `shell/apk-latest-nikki.sh`：
+
+- 每次构建分别查询 [Nikki](https://github.com/nikkinikki-org/OpenWrt-nikki/releases/latest) 和 [Mihomo](https://github.com/MetaCubeX/mihomo/releases/latest) 的最新稳定版，不使用预发布版或固定版本号。
+- 根据 ImageBuilder `.config` 的目标架构下载 Nikki APK，锁定本次下载的包版本；单独下载最新 Mihomo，覆盖实际执行的 `/usr/libexec/mihomo`，并将 `/usr/bin/mihomo` 指向它。
+- 上游缺少对应架构的发布包、下载失败或文件检查失败时，停止构建。无线路由器中使用 SNAPSHOT 的机型选择 SNAPSHOT APK；回退到 23.05 的机型不适用此更新逻辑。
+- 注释掉 `apk-custom-packages.sh` 中启用 Nikki 的整行即可取消集成。
+
+构建日志会显示选定的版本。刷入镜像后可验证：
+
+```sh
+cat /etc/nikki-build-versions
+mihomo -v
+```
+
+注意：`mihomo-meta` APK 用来提供包依赖和安装结构，包管理器显示的版本仍是 Nikki 发布包捆绑的版本；镜像中的核心二进制已单独更新，实际核心版本以 `mihomo -v` 为准。后续手动重装或升级该 APK 可能覆盖此核心。这里的“最新”指构建时的最新稳定版，已刷入的镜像不会自动更新。
+
 ## 虚拟机建议用哪条工作流？下图↓
 <img width="30%" height="30%" alt="image" src="https://github.com/user-attachments/assets/743027e0-584a-4842-bfb3-0dff22de9101" /> <br>
 虚拟机用户建议直接构建ISO镜像 此过程分2个阶段 阶段一构建固件imm 阶段二将其封装iso格式的安装器 总计耗时大约7-8分钟  <br>
