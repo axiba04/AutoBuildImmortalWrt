@@ -37,6 +37,7 @@
 
 - 每次构建分别查询 [Nikki](https://github.com/nikkinikki-org/OpenWrt-nikki/releases/latest) 和 [Mihomo](https://github.com/MetaCubeX/mihomo/releases/latest) 的最新稳定版，不使用预发布版或固定版本号。
 - 根据 ImageBuilder `.config` 的目标架构下载 Nikki APK，锁定本次下载的包版本；单独下载最新 Mihomo，覆盖实际执行的 `/usr/libexec/mihomo`，并将 `/usr/bin/mihomo` 指向它。
+- 自动修复旧版 ImageBuilder 的版本约束残留问题，避免把 Mihomo 的版本号错误应用到后续系统包。
 - 上游缺少对应架构的发布包、下载失败或文件检查失败时，停止构建。无线路由器中使用 SNAPSHOT 的机型选择 SNAPSHOT APK；回退到 23.05 的机型不适用此更新逻辑。
 - 注释掉 `apk-custom-packages.sh` 中启用 Nikki 的整行即可取消集成。
 

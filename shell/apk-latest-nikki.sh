@@ -37,6 +37,9 @@ case "$branch" in
     *) fail "不支持的 Nikki APK 分支：$branch" ;;
 esac
 
+# 旧版 FormatPackages 不会清空 pkg_ver，会把核心版本套到后续系统包。
+bash "$(dirname "$0")/apk-fix-imagebuilder.sh"
+
 work_dir=$(mktemp -d)
 trap 'rm -rf "$work_dir"' EXIT
 nikki_tag=$(latest_tag nikkinikki-org/OpenWrt-nikki)

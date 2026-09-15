@@ -45,6 +45,7 @@ export PATH="$test_dir/bin:$PATH"
 new_build() {
     mkdir -p "$test_dir/$1/packages"
     cd "$test_dir/$1"
+    cp "$repo/tests/fixtures/imagebuilder-format-packages.mk" Makefile
     printf 'CONFIG_TARGET_ARCH_PACKAGES="%s"\n' "$2" > .config
     printf 'old nikki\n' > packages/nikki-2025.01.01-r1.apk
     printf 'unrelated\n' > packages/other-1.0.apk
